@@ -1,4 +1,5 @@
 import React from 'react';
+import ArticlePreview from './ArticlePreview';
 
 const Loading = <div className="article-preview">Loading...</div>;
 const NoArticles = (
@@ -8,7 +9,7 @@ const NoArticles = (
   );
 const Content = (articles)=>(
     <div>
-    { articles.map(article => <h2>{article.title}</h2>) }
+    { articles.map(article => <ArticlePreview article={article} key={article.slug} />) }
     </div>
 );
 
