@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "history": "^4.6.3",
-    "jest-cli": "^26.6.3",
     "marked": "^0.3.6",
     "prop-types": "^15.5.10",
     "react": "^16.3.0",

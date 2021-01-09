@@ -45,46 +45,49 @@ const ArticleBanner = (article, canModify) =>(
     </div>
 )
 
+const ArticleView = (article)=>{
+  const markup = { __html: marked(article.body, { sanitize: true }) };
+  const canModify = true;
+  // this.props.currentUser && this.props.currentUser.username === this.props.article.author.username;
+  return (
+    <div className="article-page">
+      {ArticleBanner(article, canModify)}
+
+      <div className="container page">
+
+          <div className="row article-content">
+            <div className="col-xs-12">
+                <div dangerouslySetInnerHTML={markup}></div>
+                {TagList(article.tagList)}
+            </div>
+          </div>
+
+          <hr />
+
+          <div className="article-actions"></div>
+      </div>
+    </div>
+    );
+}
+  
+
   class Article extends React.Component {
     componentWillMount() {
+      console.log('start');
       this.props.onLoad(
         agent.Articles.get(this.props.match.params.id)
       );
+      console.log('end')
     }
   
-    componentWillUnmount() {
-      this.props.onUnload();
-    }
+    componentWillUnmount() {this.props.onUnload();}
   
     render() {
-      if (!this.props.article) {
-        return null;
-      }
-        const canModify = true;
-         // this.props.currentUser && this.props.currentUser.username === this.props.article.author.username;
-
-        const markup = { __html: marked(this.props.article.body, { sanitize: true }) };
-
-        return (
-            <div className="article-page">
-              {ArticleBanner(this.props.article, canModify)}
-
-              <div className="container page">
-
-                  <div className="row article-content">
-                    <div className="col-xs-12">
-                        <div dangerouslySetInnerHTML={markup}></div>
-                        {TagList(this.props.article.tagList)}
-                    </div>
-                  </div>
-
-                  <hr />
+      if (!this.props.article) return null;
       
-                  <div className="article-actions"></div>
-              </div>
-            </div>
-        );
+      return ArticleView(this.props.article);
     }
   }
   
   export default connect(mapStateToProps, mapDispatchToProps)(Article);
+  export {ArticleView};

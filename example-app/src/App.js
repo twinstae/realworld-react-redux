@@ -20,8 +20,8 @@ class App extends React.Component {
             <Header appName={this.props.appName} />
             <Switch>
               <Route path="/login" component={Login} /> 
-              <Route path="/" component={Home} />
               <Route path="/article/:id" component={Article} />
+              <Route path="/" component={Home} />
             </Switch>
           </div>
         </BrowserRouter>        
