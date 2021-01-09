@@ -1,4 +1,5 @@
-import { createStore } from 'redux';
+import { applyMiddleware, createStore } from 'redux';
+import { promiseMiddleware } from '../middleware';
 
 const defaultState = {
     appName: 'conduit',
@@ -14,6 +15,6 @@ const reducer = function(state = defaultState, action){
     }
 };
 
-const store = createStore(reducer);
+const store = createStore(reducer, applyMiddleware(promiseMiddleware));
 
 export default store;
