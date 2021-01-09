@@ -14,7 +14,9 @@ const requests = {
 
 const Articles = {
     all : page =>
-        requests.get(`/articles?limit=10`)
+        requests.get(`/articles?limit=10`),
+    get: slug =>
+        requests.get(`/articles/${slug}`),
 };
 
 export default {

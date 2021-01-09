@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const LikeButton = (count)=>(
     <div className="pull-xs-right">
@@ -13,7 +14,10 @@ const Meta = (article)=> {
 
     return (
         <div className="article-meta">
-            <a> <img src={article.author.image} alt="" /> </a>
+            <a> 
+                <img src={article.author.image} alt=""
+                    class="w3-bar-item w3-circle" style={{width:"32px"}}/>
+            </a>
             <div className="info">
                 <a className="author">{article.author.username}</a>
                 <span className="date"> {createdDate}</span>
@@ -36,12 +40,12 @@ const TagList = (tagList)=>(
 );
 
 const GoToArticle = (article) => (
-    <a to={`article/${article.slug}`} className="preview-link">
+    <Link to={`/article/${article.slug}`} className="preview-link">
         <h1>{article.title}</h1>
         <p>{article.description}</p>
         <span>Read more...</span>
         {TagList(article.tagList)}
-    </a>
+    </Link>
 );
 
 const ArticlePreview = props => {

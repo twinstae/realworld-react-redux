@@ -6,9 +6,10 @@ import Header from './component/Header';
 import Home from './component/Home';
 import Login from './component/Login';
 import './App.css';
+import Article from './component/Article';
 
 const mapStateToProps = state => ({
-  appName: state.appName
+  appName: state.common.appName
 });
 
 class App extends React.Component {
@@ -20,6 +21,7 @@ class App extends React.Component {
             <Switch>
               <Route path="/login" component={Login} /> 
               <Route path="/" component={Home} />
+              <Route path="/article/:id" component={Article} />
             </Switch>
           </div>
         </BrowserRouter>        

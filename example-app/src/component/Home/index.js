@@ -4,12 +4,12 @@ import {connect} from 'react-redux';
 import Banner from './Banner';
 import MainView from './MainView.js';
 
-import agent from '../../agents';
+import agent from '../../agent';
 
 const Promise = global.Promise;
 
 const mapStateToProps = state => ({
-    appName: state.appName
+    appName: state.common.appName
 });
 
 const mapDispachToProps = dispatch => ({
