@@ -1,5 +1,5 @@
 import Banner from './Banner';
-import MainView from './MainView';
+import MainView from './MainView.js';
 import React from 'react';
 import {connect} from 'react-redux';
 
