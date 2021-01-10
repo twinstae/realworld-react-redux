@@ -1,17 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import agent from '../agent';
-
-const Field = (type, placeholder, value, onChange)=>(
-    <fieldset className="form-group">
-        <input
-            className="form-control form-control-lg"
-            type={type}
-            placeholder={placeholder}
-            value={value}
-            onChange={onChange} />
-    </fieldset>
-);
+import { LOGIN, LOGIN_PAGE_UNLOADED } from '../constants/actionTypes';
 
 const SignInButton = (
     <button 
@@ -45,21 +35,41 @@ class Login extends React.Component {
             password: ''
         };
 
-        this.changeEmail = ev => this.setState(state => ({
-            ...state,
-            email : ev.target.value
-        }));
-        this.changePassword = ev => this.setState(state => ({
-            ...state,
-            password : ev.target.value
-        }));
+        this.changeInput = this.handleInputChange.bind(this);
         this.submitForm = (email, password) => ev => {
             ev.preventDefault();
             this.props.onSubmit(email, password);
         };
     }
 
+    handleInputChange(ev){
+        const target = ev.target;
+        const name = target.name;
+
+        this.setState(state => {
+            const newState = {
+                ...state,
+                [name] : target.value
+            }
+            return newState
+        });
+    }
+
     componentWillUnmount(){ this.props.onUnload(); }
+
+    Field (type, value){
+        return (
+            <fieldset className="form-group">
+                <input
+                    className="form-control form-control-lg"
+                    type={type}
+                    placeholder={type}
+                    name={type}
+                    value={value}
+                    onChange={this.changeInput} />
+            </fieldset>
+        );
+    }
 
     LoginForm () {
         const email = this.state.email;
@@ -68,13 +78,15 @@ class Login extends React.Component {
         return (
             <form onSubmit={this.submitForm(email, password)}>
             <fieldset>
-                {Field('email', 'Email', email, this.changeEmail)}
-                {Field('password', 'Password', password, this.changePassword)}
+                {this.Field('email', email)}
+                {this.Field('password', password)}
                 {SignInButton}
             </fieldset>
         </form>
         )
     }
+
+    
 
     render() {
         return (
