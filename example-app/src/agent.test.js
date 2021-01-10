@@ -8,6 +8,7 @@ test('get api response', async () => {
 
 test('get api response', async () => {
     const result = await agent.Articles.all();
-    console.log(result);
     expect(result.articles[0].title).toBeTruthy();
 });
+
+test('login', async()=>{})
