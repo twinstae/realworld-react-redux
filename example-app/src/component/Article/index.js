@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React from 'react'
 import agent from '../../agent';
 import { connect } from 'react-redux';
 import { ARTICLE_PAGE_LOADED, ARTICLE_PAGE_UNLOADED } from '../../constants/actionTypes';
@@ -71,23 +70,22 @@ const ArticleView = (article)=>{
 }
   
 
-  class Article extends React.Component {
-    componentWillMount() {
+class Article extends React.Component {
+  componentWillMount() {
       console.log('start');
       this.props.onLoad(
         agent.Articles.get(this.props.match.params.id)
       );
       console.log('end')
     }
-  
-    componentWillUnmount() {this.props.onUnload();}
-  
-    render() {
-      if (!this.props.article) return null;
-      
-      return ArticleView(this.props.article);
-    }
+  componentWillUnmount(){
+    this.props.onUnload();
   }
+  render() {
+    if (!this.props.article) return null;
+    return ArticleView(this.props.article);
+  }
+}
   
-  export default connect(mapStateToProps, mapDispatchToProps)(Article);
-  export {ArticleView};
+export default connect(mapStateToProps, mapDispatchToProps)(Article);
+export {ArticleView};

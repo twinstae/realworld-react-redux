@@ -1,4 +1,4 @@
-import {APP_LOAD, REGISTER, REGISTER_PAGE_UNLOADED} from '../../constants/actionTypes';
+import {APP_LOAD, ARTICLE_SUBMITTED, LOGOUT, REDIRECT, REGISTER, REGISTER_PAGE_UNLOADED} from '../../constants/actionTypes';
 
 const defaultState = {
     appName: 'Conduit',
@@ -16,6 +16,13 @@ export default (state = defaultState, action) => {
                 appLoaded: true,
                 currentUser: action.payload ? action.payload.user : null
             };
+        case REDIRECT:
+            return { ...state, redirectTo: null };
+        case LOGOUT:
+            return { ...state, redirectTo: '/', token: null, currentUser: null };
+        case ARTICLE_SUBMITTED:
+            const redirectUrl = `/article/${action.payload.article.slug}`;
+            return { ...state, redirectTo: redirectUrl };
         case REGISTER:
             return {
                 ...state,

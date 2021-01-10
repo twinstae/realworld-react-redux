@@ -1,21 +1,30 @@
 import React from 'react';
-
+import ListErrors from './ListErrors';
 
 class Form extends React.Component {
+
+    template = {};
+    submitMessage = "Submit";
+
     constructor(){
         super();
-        this.state = {
-            email: '',
-            password: ''
-        };
-
         this.changeInput = this.handleInputChange.bind(this);
+        this.submitForm = (fields) => ev => {
+            ev.preventDefault();
+            this.props.onSubmit(fields);
+        };       
+        this.state = this.emptyState(); 
+    }
+
+    emptyState(){
+        return Object.keys(this.template).reduce(
+            (obj, field)=> {obj[field]= ''; return obj;}, {}
+        );
     }
 
     handleInputChange(ev){
         const target = ev.target;
         const name = target.name;
-
         this.setState(state => {
             const newState = {
                 ...state,
@@ -27,8 +36,7 @@ class Form extends React.Component {
 
     componentWillUnmount(){ this.props.onUnload(); }
 
-    Field (name, value, type=null){
-        return (
+    Field = (name, value, type, onKeyUp) => (
             <fieldset className="form-group">
                 <input
                     className="form-control form-control-lg"
@@ -36,34 +44,44 @@ class Form extends React.Component {
                     placeholder={name}
                     name={name}
                     value={value}
-                    onChange={this.changeInput} />
+                    onChange={this.changeInput}
+                    onKeyUp={onKeyUp} />
             </fieldset>
         );
-    }
 
-    SubmitButton = (text) => (
+    SubmitButton = () => (
         <button 
             className="btn btn-lg btn-primary pull-xs-right"
             type="submit">
-            {text}
+            {this.submitMessage}
         </button>
     );
 
-    Frame(child){
-        return (
-            <div className="auth-page">
+    FormBody =(submitMessage) => (   
+        <div className="row">
+            <form onSubmit={this.submitForm(this.state)}>
+                <fieldset>                
+                    {Object.keys(this.template).map((name)=>{
+                        const value = this.state[name];
+                        const type = this.template[name];
+                        return this.Field(name, value, type);
+                    })}
+                </fieldset>
+                {this.SubmitButton()}
+            </form>   
+        </div>
+        );
+
+    Frame = (child, pageCSS='auth-page') => (
+            <div className={pageCSS}>
                 <div className="container page">
-                    <div className="row">
-                        {child}
-                    </div>
+                    {ListErrors(this.props.errors)}
+                    {child}
                 </div>
             </div>
-        )
-    }
+        );
 
-    render() {
-        return null;
-    }
+    render = () => this.Frame(this.FormBody());
 }
 
 export default Form;

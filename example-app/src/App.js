@@ -12,6 +12,7 @@ import Register from './component/Register';
 import Article from './component/Article';
 import { APP_LOAD, REDIRECT } from './constants/actionTypes';
 import './App.css';
+import Editor from './component/Editor';
 
 const mapStateToProps = state => ({
   appLoaded: state.common.appLoaded,
@@ -37,9 +38,13 @@ class App extends React.Component {
 
   componentWillMount() {
     const token = window.localStorage.getItem('jwt');
-    if (token) { agent.setToken(token); }
+    if (token) {
+      agent.setToken(token);
+      console.log(token)
+    }
     this.props.onLoad(token ? agent.Auth.current() : null, token);
   }
+  
   render() {
     const Load = this.props.appLoaded ?
       (
@@ -48,15 +53,15 @@ class App extends React.Component {
           <Route path="/login" component={Login} /> 
           <Route path="/register" component={Register}/>
           <Route path="/article/:id" component={Article} />
+          <Route path="/editor/:slug" component={Editor} />
+          <Route path="/editor/" component={Editor} />
         </Switch>
       ) : null;
 
     return(
       <BrowserRouter>
         <div>
-          <Header
-            appName={this.props.appName}
-            currentUser={this.props.currentUser}/>
+          <Header />
           {Load}
         </div>
       </BrowserRouter>        
