@@ -7,15 +7,31 @@ const NavItem = (link, value) => (
     </li>
 );
 
+const LoginView = (userName) => (
+    <ul className="nav navbar-nav pull-xs-right">
+        {NavItem('/', 'Home')}
+        {NavItem(`/@${userName}`, userName)}
+    </ul>
+)
+
+const LogoutView = (
+    <ul className="nav navbar-nav pull-xs-right">
+        {NavItem('/', 'Home')}
+        {NavItem('/login', 'Sign in')}
+        {NavItem('/register', 'Register')}
+    </ul>
+)
+
 class Header extends React.Component {
     render () {
         return (
             <nav className="navbar navbar-light">
                 <Link to="/" className="navbar-brand"> {this.props.appName.toLowerCase()} </Link>
-                <ul className="nav navbar-nav pull-xs-right">    
-                    {NavItem('/', 'Home')}
-                    {NavItem('/login', 'Sign In')}
-                </ul>
+                { 
+                    this.props.currentUser ?
+                        LoginView(this.props.currentUser.username) :
+                        LogoutView
+                }
             </nav>
         );
     }
