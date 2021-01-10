@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import agent from '../agent';
 import { LOGIN, LOGIN_PAGE_UNLOADED } from '../constants/actionTypes';
 import ListErrors from './ListErros';
@@ -89,7 +90,7 @@ class Login extends React.Component {
                     <div className="row">
                         <div className="col-md-6 offset-md-3 col-xs-12">
                             <h1 className="test-xs-center">Sign In</h1>
-                            <p className="text-xs-center"><a>Need an account?</a></p>
+                            <Link to="/register" className="text-xs-center">Need an account?</Link>
                             {ListErrors(this.props.errors)}
                             {this.LoginForm()}
                         </div>

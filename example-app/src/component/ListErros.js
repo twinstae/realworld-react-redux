@@ -12,7 +12,7 @@ const ListErrors = (errors)=>{
                     ))
                 }
             </ul>
-        ) :null;
+        ) : null;
 }
 
 export default ListErrors
