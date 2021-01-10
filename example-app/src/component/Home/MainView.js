@@ -53,14 +53,14 @@ const GlobalFeedTab = props => NavItem(
         }, props.onTabClick)
     )
 
-    const TagFilterTab = props => {
-        if (!props.tag) return null;
-        return NavItem(
-            props.tag,
-            'nav-link active', 
-            null
-        )
-      };
+const TagFilterTab = props => {
+    if (!props.tag) return null;
+    return NavItem(
+        props.tag,
+        'nav-link active', 
+        null
+    )
+    };
 
 const MainView = props =>(
     <div className="col-md-9">        
