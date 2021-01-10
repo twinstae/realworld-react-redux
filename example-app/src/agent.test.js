@@ -11,6 +11,25 @@ describe('Articles', ()=>{
         const result = await agent.Articles.all();
         expect(result.articles[0].title).toBeTruthy();
     });
+
+    const login = async ()=>{
+        const loginRes = await agent.Auth.login('twinstae@naver.com', '12345678');
+        return loginRes.user.token;
+    }
+    
+    it('put artcile', async () => {
+        const token = await login();
+        agent.setToken(token);
+
+        const result = await agent.Articles.create({
+                title: "api test",
+                description: "test description",
+                body: "한국어 글입니다.",
+                tagList: ['한국어']
+            });
+        console.log(result);
+        expect(result).toBeTruthy();
+    })
 })
 
 describe('Auth', ()=>{
@@ -24,7 +43,6 @@ describe('Auth', ()=>{
 
         return loginRes.user.token;
     }
-
     it('login', async ()=>{
         login();
     })

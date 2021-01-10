@@ -1,4 +1,5 @@
 import React from 'react';
+import ListErrors from './ListErrors';
 
 class Form extends React.Component {
 
@@ -35,15 +36,16 @@ class Form extends React.Component {
 
     componentWillUnmount(){ this.props.onUnload(); }
 
-    Field = (name, value, type, className="form-control form-control-lg") => (
+    Field = (name, value, type, onKeyUp) => (
             <fieldset className="form-group">
                 <input
-                    className={className}
+                    className="form-control form-control-lg"
                     type={type ? type : name}
                     placeholder={name}
                     name={name}
                     value={value}
-                    onChange={this.changeInput} />
+                    onChange={this.changeInput}
+                    onKeyUp={onKeyUp} />
             </fieldset>
         );
 
@@ -55,25 +57,26 @@ class Form extends React.Component {
         </button>
     );
 
-    FormBody =(submitMessage) => (    
-            <fieldset>                
-                {Object.keys(this.template).map((name)=>{
-                    const value = this.state[name];
-                    const type = this.template[name];
-                    return this.Field(name, value, type);
-                })}
+    FormBody =(submitMessage) => (   
+        <div className="row">
+            <form onSubmit={this.submitForm(this.state)}>
+                <fieldset>                
+                    {Object.keys(this.template).map((name)=>{
+                        const value = this.state[name];
+                        const type = this.template[name];
+                        return this.Field(name, value, type);
+                    })}
+                </fieldset>
                 {this.SubmitButton()}
-            </fieldset>
+            </form>   
+        </div>
         );
 
-    Frame = (child) => (
-            <div className="auth-page">
+    Frame = (child, pageCSS='auth-page') => (
+            <div className={pageCSS}>
                 <div className="container page">
-                    <div className="row">
-                        <form onSubmit={this.submitForm(this.state)}>
-                            {child}
-                        </form>
-                    </div>
+                    {ListErrors(this.props.errors)}
+                    {child}
                 </div>
             </div>
         );

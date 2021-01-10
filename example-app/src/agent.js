@@ -37,13 +37,19 @@ const Auth = {
         requests.put('/user', { user })
 }
 
+const omitSlug = article => Object.assign({}, article, {slug:undefined});
+
 const Articles = {
     all : page =>
         requests.get(`/articles?limit=10`),
     get: slug =>
         requests.get(`/articles/${slug}`),
     feed: () =>
-        requests.get('/articles/feed?limit=10&offset=0')
+        requests.get('/articles/feed?limit=10&offset=0'),
+    update: article =>
+        requests.put(`/articles/${article.slug}`, { article: omitSlug(article) }),
+    create: article =>
+        requests.post('/articles', { article })
 };
 
 export default {

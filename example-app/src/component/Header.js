@@ -13,6 +13,7 @@ const LoginView = (userName, onClickLogout) => (
     <ul className="nav navbar-nav pull-xs-right">
         {NavItem('/', 'Home')}
         {NavItem(`/@${userName}`, userName)}
+        {NavItem('/editor', 'Write')}
         {<li className="nav-item">
             <button
                 className="btn btn-outline-danger"
