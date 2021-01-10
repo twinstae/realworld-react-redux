@@ -6,8 +6,6 @@ import MainView from './MainView.js';
 
 import agent from '../../agent';
 
-const Promise = global.Promise;
-
 const mapStateToProps = state => ({
     appName: state.common.appName
 });

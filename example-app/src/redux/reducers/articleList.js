@@ -1,5 +1,4 @@
 const defaultState = {
-    appName: 'conduit',
     articles: null,
 };
 
