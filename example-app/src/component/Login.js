@@ -4,14 +4,7 @@ import { Link } from 'react-router-dom';
 import agent from '../agent';
 import { LOGIN, LOGIN_PAGE_UNLOADED } from '../constants/actionTypes';
 import ListErrors from './ListErrors';
-
-const SignInButton = (
-    <button 
-        className="btn btn-lg btn-primary pull-xs-right"
-        type="submit">
-        Sign In
-    </button>
-);
+import Form from './Form'
 
 const mapStateToProps = state => ({ ...state.auth });
 const mapDispachToProps = dispacth => ({
@@ -22,48 +15,13 @@ const mapDispachToProps = dispacth => ({
     },
 });
 
-class Login extends React.Component {
+class Login extends Form{
     constructor(){
-        super();
-        this.state = {
-            email: '',
-            password: ''
-        };
-
-        this.changeInput = this.handleInputChange.bind(this);
+        super()
         this.submitForm = (email, password) => ev => {
-            ev.preventDefault();
-            this.props.onSubmit(email, password);
-        };
-    }
-
-    handleInputChange(ev){
-        const target = ev.target;
-        const name = target.name;
-
-        this.setState(state => {
-            const newState = {
-                ...state,
-                [name] : target.value
-            }
-            return newState
-        });
-    }
-
-    componentWillUnmount(){ this.props.onUnload(); }
-
-    Field (type, value){
-        return (
-            <fieldset className="form-group">
-                <input
-                    className="form-control form-control-lg"
-                    type={type}
-                    placeholder={type}
-                    name={type}
-                    value={value}
-                    onChange={this.changeInput} />
-            </fieldset>
-        );
+                ev.preventDefault();
+                this.props.onSubmit(email, password);
+            };
     }
 
     LoginForm () {
@@ -75,29 +33,23 @@ class Login extends React.Component {
                 <fieldset>
                     {this.Field('email', email)}
                     {this.Field('password', password)}
-                    {SignInButton}
+                    {this.SubmitButton('Sign In')}
                 </fieldset>
             </form>
         )
     }
 
-    
-
-    render() {
-        return (
-            <div className="auth-page">
-                <div className="container page">
-                    <div className="row">
-                        <div className="col-md-6 offset-md-3 col-xs-12">
-                            <h1 className="test-xs-center">Sign In</h1>
-                            <Link to="/register" className="text-xs-center">Need an account?</Link>
-                            {ListErrors(this.props.errors)}
-                            {this.LoginForm()}
-                        </div>
+    render (){
+        return this.Frame(
+                    <div className="col-md-6 offset-md-3 col-xs-12">
+                        <h1 className="test-xs-center">Sign In</h1>
+                        <Link to="/register" className="text-xs-center">
+                            Need an account? Please Sign Up!
+                        </Link>
+                        {ListErrors(this.props.errors)}
+                        {this.LoginForm()}
                     </div>
-                </div>
-            </div>
-        );
+                )
     }
 }
 
