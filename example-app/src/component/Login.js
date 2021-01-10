@@ -1,49 +1,56 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import agent from '../agent';
+import { LOGIN, LOGIN_PAGE_UNLOADED } from '../constants/actionTypes';
+import ListErrors from './ListErrors';
+import Form from './Form'
 
-const Field = (type, placeholder)=>(
-    <fieldset className="form-group">
-        <input
-            className="form-control form-control-lg"
-            type={type}
-            placeholder={placeholder} />
-    </fieldset>
-);
+const mapStateToProps = state => ({ ...state.auth });
+const mapDispachToProps = dispacth => ({
+    onSubmit: (email, password) =>
+        dispacth({ type: LOGIN, payload: agent.Auth.login(email, password) }),
+    onUnload: () => {
+        dispacth({ type: LOGIN_PAGE_UNLOADED })
+    },
+});
 
-const SignInButton = (
-    <button 
-        className="btn btn-lg btn-primary pull-xs-right"
-        type="submit">
-        Sign In
-    </button>
-);
+class Login extends Form{
+    constructor(){
+        super()
+        this.submitForm = (email, password) => ev => {
+                ev.preventDefault();
+                this.props.onSubmit(email, password);
+            };
+    }
 
-const LoginForm = (
-    <form>
-        <fieldset>
-            {Field('password', 'Password')}
-            {Field('email', 'Email')}
-            {SignInButton}
-        </fieldset>
-    </form>
-);
+    LoginForm () {
+        const email = this.state.email;
+        const password = this.state.password;
 
-class Login extends React.Component {
-    render() {
-        return (
-            <div className="auth-page">
-                <div className="container page">
-                    <div className="row">
-                        <div className="col-md-6 offset-md-3 col-xs-12">
-                            <h1 className="test-xs-center">Sign In</h1>
-                            <p className="text-xs-center"><a>Need an account?</a></p>
-                        </div>
-                        {LoginForm}
+        return (    
+            <form onSubmit={this.submitForm(email, password)}>
+                <fieldset>
+                    {this.Field('email', email)}
+                    {this.Field('password', password)}
+                    {this.SubmitButton('Sign In')}
+                </fieldset>
+            </form>
+        )
+    }
+
+    render (){
+        return this.Frame(
+                    <div className="col-md-6 offset-md-3 col-xs-12">
+                        <h1 className="test-xs-center">Sign In</h1>
+                        <Link to="/register" className="text-xs-center">
+                            Need an account? Please Sign Up!
+                        </Link>
+                        {ListErrors(this.props.errors)}
+                        {this.LoginForm()}
                     </div>
-                </div>
-            </div>
-        );
+                )
     }
 }
 
-export default connect(()=>{})(Login);
+export default connect(mapStateToProps, mapDispachToProps)(Login);
