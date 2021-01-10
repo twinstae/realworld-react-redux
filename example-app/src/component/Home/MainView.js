@@ -15,19 +15,23 @@ const mapDispatchToProps = dispatch => ({
     })
 })
 
-const nowCss = (expected, nowTab)=>nowTab === expected ? 'nav-link active' : 'nav-link';
+const nowCss = (isActive)=> isActive ? 'nav-link active' : 'nav-link';
 
 const onTabClick = (command, onTabClick) => (ev) => {
     ev.preventDefault();
     onTabClick(command);
 };
 
-function NavItem(name, className, onClick) {
+function NavItem(name,tab, pager) {
     return <li className="nav-item">
         <a
             href=""
-            className={className}
-            onClick={onClick}>
+            className={nowCss(tab === props.tab)}
+            onClick={onTabClick({
+                        tab: tab,
+                        pager: pager,
+                        payload: pager()
+                    })}>
             {name}
         </a>
     </li>;
@@ -35,23 +39,15 @@ function NavItem(name, className, onClick) {
 
 const YourFeedTab = props => props.token ? NavItem(
         'Your Feed',
-        nowCss('feed', props.tab),
-        onTabClick({
-            tab: 'feed',
-            pager: agent.Articles.feed,
-            payload: agent.Articles.feed()
-        }, props.onTabClick)
+        'feed',
+        agent.Articles.feed
     ) : null;
 
 const GlobalFeedTab = props => NavItem(
-        "Global Feed",
-        nowCss('all', props.tab), 
-        onTabClick({
-            tab: 'all',
-            pager: agent.Articles.all,
-            payload: agent.Articles.all()
-        }, props.onTabClick)
-    )
+        'Global Feed',
+        'all',
+        agent.Articles.all
+    );
 
     const TagFilterTab = props => {
         if (!props.tag) return null;
