@@ -38,10 +38,10 @@ class Form extends React.Component {
 
     componentWillUnmount(){ this.props.onUnload(); }
 
-    Field = (name, value, type=null) => (
+    Field = (name, value, type, className="form-control form-control-lg") => (
             <fieldset className="form-group">
                 <input
-                    className="form-control form-control-lg"
+                    className={className}
                     type={type ? type : name}
                     placeholder={name}
                     name={name}
@@ -50,40 +50,38 @@ class Form extends React.Component {
             </fieldset>
         );
 
-    SubmitButton = (text) => (
+    SubmitButton = () => (
         <button 
             className="btn btn-lg btn-primary pull-xs-right"
             type="submit">
-            {text}
+            {this.submitMessage}
         </button>
     );
 
     FormBody =(submitMessage) => (    
-            <form onSubmit={this.submitForm(this.state)}>
-                <fieldset>
-                    {Object.keys(this.template).map((name)=>{
-                        const value = this.state[name];
-                        const type = this.template[name];
-                        return this.Field(name, value, type);
-                    })}
-                    {this.SubmitButton(this.submitMessage)}
-                </fieldset>
-            </form>
+            <fieldset>                
+                {Object.keys(this.template).map((name)=>{
+                    const value = this.state[name];
+                    const type = this.template[name];
+                    return this.Field(name, value, type);
+                })}
+                {this.SubmitButton()}
+            </fieldset>
         );
 
     Frame = (child) => (
             <div className="auth-page">
                 <div className="container page">
                     <div className="row">
-                        {child}
+                        <form onSubmit={this.submitForm(this.state)}>
+                            {child}
+                        </form>
                     </div>
                 </div>
             </div>
         );
 
-    render = () => this.Frame(
-        this.FormBody()
-    );
+    render = () => this.Frame(this.FormBody());
 }
 
 export default Form;
