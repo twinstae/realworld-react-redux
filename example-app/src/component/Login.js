@@ -11,13 +11,6 @@ const SignInButton = (
     </button>
 );
 
-const Head = (
-    <div className="col-md-6 offset-md-3 col-xs-12">
-        <h1 className="test-xs-center">Sign In</h1>
-        <p className="text-xs-center"><a>Need an account?</a></p>
-    </div>
-)
-
 const mapStateToProps = state => ({ ...state.auth });
 const mapDispachToProps = dispacth => ({
     onSubmit: (email, password) =>
@@ -75,14 +68,14 @@ class Login extends React.Component {
         const email = this.state.email;
         const password = this.state.password;
 
-        return (
+        return (    
             <form onSubmit={this.submitForm(email, password)}>
-            <fieldset>
-                {this.Field('email', email)}
-                {this.Field('password', password)}
-                {SignInButton}
-            </fieldset>
-        </form>
+                <fieldset>
+                    {this.Field('email', email)}
+                    {this.Field('password', password)}
+                    {SignInButton}
+                </fieldset>
+            </form>
         )
     }
 
@@ -93,8 +86,12 @@ class Login extends React.Component {
             <div className="auth-page">
                 <div className="container page">
                     <div className="row">
-                        {Head}
-                        {this.LoginForm()}
+                        <div className="col-md-6 offset-md-3 col-xs-12">
+                            <h1 className="test-xs-center">Sign In</h1>
+                            <p className="text-xs-center"><a>Need an account?</a></p>
+                            <ListErrors errors={this.props.errors} />
+                            {this.LoginForm()}
+                        </div>
                     </div>
                 </div>
             </div>
