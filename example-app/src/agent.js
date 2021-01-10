@@ -5,7 +5,7 @@ const superagent = superagentPromise(_superagent, global.Promise);
 
 const API_ROOT = 'https://conduit.productionready.io/api';
 
-const responseBody = res => res.body;
+const resBody = res => res.body;
 
 let token = null;
 const tokenPlugin = req => {
@@ -16,9 +16,11 @@ const full = (url) => `${API_ROOT}${url}`;
 
 const requests = {
     get: url => 
-        superagent.get(full(url)).then(responseBody),
+        superagent.get(full(url)).then(resBody),
     post: (url, body) => 
-        superagent.post(full(url),body).use(tokenPlugin).then(responseBody)
+        superagent.post(full(url),body).use(tokenPlugin).then(resBody),
+    put: (url, body) =>
+    superagent.put(full(url), body).use(tokenPlugin).then(resBody),
 };
 
 const Auth = {
