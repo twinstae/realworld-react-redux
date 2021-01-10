@@ -82,7 +82,7 @@ class Login extends React.Component {
                 <div className="container page">
                     <div className="row">
                         {Head}
-                        {LoginForm()}
+                        {this.LoginForm()}
                     </div>
                 </div>
             </div>
