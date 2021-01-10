@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import agent from '../agent';
 import { LOGIN, LOGIN_PAGE_UNLOADED } from '../constants/actionTypes';
-import ListErrors from './ListErros';
+import ListErrors from './ListErrors';
 
 const SignInButton = (
     <button 

@@ -5,8 +5,9 @@ import PropTypes from 'prop-types';
 import Header from './component/Header';
 import Home from './component/Home';
 import Login from './component/Login';
-import './App.css';
+import Register from './component/Register';
 import Article from './component/Article';
+import './App.css';
 
 const mapStateToProps = state => ({
   appName: state.common.appName
