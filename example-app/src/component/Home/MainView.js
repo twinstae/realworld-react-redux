@@ -22,16 +22,12 @@ const onTabClick = (command, onTabClick) => (ev) => {
     onTabClick(command);
 };
 
-function NavItem(name,tab, pager) {
+function NavItem(name, className, onClick) {
     return <li className="nav-item">
         <a
             href=""
-            className={nowCss(tab === props.tab)}
-            onClick={onTabClick({
-                        tab: tab,
-                        pager: pager,
-                        payload: pager()
-                    })}>
+            className={className}
+            onClick={onClick}>
             {name}
         </a>
     </li>;
@@ -39,15 +35,23 @@ function NavItem(name,tab, pager) {
 
 const YourFeedTab = props => props.token ? NavItem(
         'Your Feed',
-        'feed',
-        agent.Articles.feed
+        nowCss('feed' === props.tab),
+        onTabClick({
+            tab: 'feed',
+            pager: agent.Articles.feed,
+            payload: agent.Articles.feed()
+        }, props.onTabClick)
     ) : null;
 
 const GlobalFeedTab = props => NavItem(
-        'Global Feed',
-        'all',
-        agent.Articles.all
-    );
+        "Global Feed",
+        nowCss('all', props.tab), 
+        onTabClick({
+            tab: 'all',
+            pager: agent.Articles.all,
+            payload: agent.Articles.all()
+        }, props.onTabClick)
+    )
 
     const TagFilterTab = props => {
         if (!props.tag) return null;
