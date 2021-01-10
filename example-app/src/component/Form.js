@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 class Form extends React.Component {
 
     template = {};
@@ -17,11 +16,9 @@ class Form extends React.Component {
     }
 
     emptyState(){
-        const empty = {}
-        for (const field of Object.keys(this.template)){
-            empty[field] = '';
-        }
-        return empty
+        return Object.keys(this.template).reduce(
+            (obj, field)=> {obj[field]= ''; return obj;}, {}
+        );
     }
 
     handleInputChange(ev){

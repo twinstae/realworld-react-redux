@@ -14,10 +14,9 @@ const Content = (articles)=>(
 );
 
 const ArticleList = props => {
-    if (!props.articles) { return Loading; }
-    if (props.articles.length === 0) { return NoArticles; }
-
-    return Content(props.articles);
+  if (!props.articles) { return Loading; }
+  if (props.articles.length === 0) { return NoArticles; }
+  return Content(props.articles);
 };
 
 export default ArticleList;

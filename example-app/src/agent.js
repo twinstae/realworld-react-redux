@@ -42,6 +42,8 @@ const Articles = {
         requests.get(`/articles?limit=10`),
     get: slug =>
         requests.get(`/articles/${slug}`),
+    feed: () =>
+        requests.get('/articles/feed?limit=10&offset=0')
 };
 
 export default {
