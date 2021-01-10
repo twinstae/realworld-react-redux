@@ -16,11 +16,12 @@ const mapDispachToProps = dispacth => ({
     },
 });
 
-class Login extends Form{
+class Login extends Form {
     template = {
         email: 'email',
         password: 'password'
-    }
+    };
+    submitMessage = "Sign In";
 }
 
 export default connect(mapStateToProps, mapDispachToProps)(Login);

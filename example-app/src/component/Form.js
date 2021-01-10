@@ -3,7 +3,8 @@ import React from 'react';
 
 class Form extends React.Component {
 
-    template = {}
+    template = {};
+    submitMessage = "Submit";
 
     constructor(){
         super();
@@ -61,10 +62,11 @@ class Form extends React.Component {
             <form onSubmit={this.submitForm(this.state)}>
                 <fieldset>
                     {Object.keys(this.template).map((name)=>{
-                        const type = this.template[name]
-                        return this.Field(name, this.state[name], type);
+                        const value = this.state[name];
+                        const type = this.template[name];
+                        return this.Field(name, value, type);
                     })}
-                    {this.SubmitButton(submitMessage)}
+                    {this.SubmitButton(this.submitMessage)}
                 </fieldset>
             </form>
         );
@@ -80,7 +82,7 @@ class Form extends React.Component {
         );
 
     render = () => this.Frame(
-        this.FormBody("Submit")
+        this.FormBody()
     );
 }
 

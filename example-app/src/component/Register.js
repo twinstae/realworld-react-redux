@@ -18,12 +18,13 @@ const mapDispatchToProps = dispatch => ({
         dispatch({ type: REGISTER_PAGE_UNLOADED })
 });
 
-class Register extends Form{
+class Register extends Form {
     template = {
         username:'text',
         email: 'email',
         password: 'password'
     };
+    submitMessage = "Register";
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);
