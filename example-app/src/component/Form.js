@@ -2,20 +2,30 @@ import React from 'react';
 
 
 class Form extends React.Component {
+
+    template = {}
+
     constructor(){
         super();
-        this.state = {
-            email: '',
-            password: ''
-        };
-
         this.changeInput = this.handleInputChange.bind(this);
+        this.submitForm = (fields) => ev => {
+            ev.preventDefault();
+            this.props.onSubmit(fields);
+        };       
+        this.state = this.emptyState(); 
+    }
+
+    emptyState(){
+        const empty = {}
+        for (const field of Object.keys(this.template)){
+            empty[field] = '';
+        }
+        return empty
     }
 
     handleInputChange(ev){
         const target = ev.target;
         const name = target.name;
-
         this.setState(state => {
             const newState = {
                 ...state,
@@ -27,8 +37,7 @@ class Form extends React.Component {
 
     componentWillUnmount(){ this.props.onUnload(); }
 
-    Field (name, value, type=null){
-        return (
+    Field = (name, value, type=null) => (
             <fieldset className="form-group">
                 <input
                     className="form-control form-control-lg"
@@ -39,7 +48,6 @@ class Form extends React.Component {
                     onChange={this.changeInput} />
             </fieldset>
         );
-    }
 
     SubmitButton = (text) => (
         <button 
@@ -49,8 +57,19 @@ class Form extends React.Component {
         </button>
     );
 
-    Frame(child){
-        return (
+    FormBody =(submitMessage) => (    
+            <form onSubmit={this.submitForm(this.state)}>
+                <fieldset>
+                    {Object.keys(this.template).map((name)=>{
+                        const type = this.template[name]
+                        return this.Field(name, this.state[name], type);
+                    })}
+                    {this.SubmitButton(submitMessage)}
+                </fieldset>
+            </form>
+        );
+
+    Frame = (child) => (
             <div className="auth-page">
                 <div className="container page">
                     <div className="row">
@@ -58,12 +77,11 @@ class Form extends React.Component {
                     </div>
                 </div>
             </div>
-        )
-    }
+        );
 
-    render() {
-        return null;
-    }
+    render = () => this.Frame(
+        this.FormBody("Submit")
+    );
 }
 
 export default Form;

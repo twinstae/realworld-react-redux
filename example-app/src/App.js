@@ -54,9 +54,7 @@ class App extends React.Component {
     return(
       <BrowserRouter>
         <div>
-          <Header
-            appName={this.props.appName}
-            currentUser={this.props.currentUser}/>
+          <Header />
           {Load}
         </div>
       </BrowserRouter>        
