@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import agent from '../agent';
 import { LOGIN, LOGIN_PAGE_UNLOADED } from '../constants/actionTypes';
+import ListErrors from './ListErros';
 
 const SignInButton = (
     <button 
@@ -89,7 +90,7 @@ class Login extends React.Component {
                         <div className="col-md-6 offset-md-3 col-xs-12">
                             <h1 className="test-xs-center">Sign In</h1>
                             <p className="text-xs-center"><a>Need an account?</a></p>
-                            <ListErrors errors={this.props.errors} />
+                            {ListErrors(this.props.errors)}
                             {this.LoginForm()}
                         </div>
                     </div>
