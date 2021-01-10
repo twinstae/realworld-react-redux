@@ -2,12 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import agent from '../agent';
 
-const Field = (type, placeholder)=>(
+const Field = (type, placeholder, value, onChange)=>(
     <fieldset className="form-group">
         <input
             className="form-control form-control-lg"
             type={type}
-            placeholder={placeholder} />
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange} />
     </fieldset>
 );
 
@@ -25,16 +27,6 @@ const Head = (
         <p className="text-xs-center"><a>Need an account?</a></p>
     </div>
 )
-
-const LoginForm = (
-    <form>
-        <fieldset>
-            {Field('password', 'Password')}
-            {Field('email', 'Email')}
-            {SignInButton}
-        </fieldset>
-    </form>
-);
 
 const mapStateToProps = state => ({ ...state.auth });
 const mapDispachToProps = dispacth => ({
@@ -69,15 +61,28 @@ class Login extends React.Component {
 
     componentWillUnmount(){ this.props.onUnload(); }
 
-    render() {
-        
+    LoginForm () {
+        const email = this.state.email;
+        const password = this.state.password;
 
+        return (
+            <form onSubmit={this.submitForm(email, password)}>
+            <fieldset>
+                {Field('email', 'Email', email, this.changeEmail)}
+                {Field('password', 'Password', password, this.changePassword)}
+                {SignInButton}
+            </fieldset>
+        </form>
+        )
+    }
+
+    render() {
         return (
             <div className="auth-page">
                 <div className="container page">
                     <div className="row">
                         {Head}
-                        {LoginForm}
+                        {LoginForm()}
                     </div>
                 </div>
             </div>
