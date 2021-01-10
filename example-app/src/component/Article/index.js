@@ -84,7 +84,6 @@ const ArticleView = (article)=>{
   
     render() {
       if (!this.props.article) return null;
-      
       return ArticleView(this.props.article);
     }
   }

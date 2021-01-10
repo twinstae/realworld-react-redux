@@ -11,8 +11,10 @@ const mapStateToProps = state => ({ ...state.auth });
 
 const mapDispatchToProps = dispatch => ({
     onSubmit: ({username, email, password}) => {
-        const payload = agent.Auth.register(username, email, password);
-        dispatch({ type: REGISTER, payload })
+        dispatch({
+            type: REGISTER,
+            payload : agent.Auth.register(username, email, password)
+        })
     },
     onUnload: () =>
         dispatch({ type: REGISTER_PAGE_UNLOADED })
