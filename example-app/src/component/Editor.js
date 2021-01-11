@@ -5,6 +5,9 @@ import { ADD_TAG, ARTICLE_SUBMITTED, EDITOR_PAGE_LOADED, EDITOR_PAGE_UNLOADED, R
 import agent from '../agent';
 import marked from 'marked';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
+
 const mapStateToProps = (state) => ({
     ...state.editor
 })
@@ -60,14 +63,17 @@ export class Editor extends Form {
     } 
 
     TextareaField = (name, value) => (
-        <textarea
-            className="form-control"
-            rows="8"
-            placeholder="Write your article (in markdown)"
-            name={name}
-            value={value}
-            onChange={this.changeInput}>
-        </textarea>
+        <fieldset className="form-group">
+            <textarea
+                className="form-control"
+                rows="8"
+                placeholder="Write your article (in markdown)"
+                name={name}
+                value={value}
+                onChange={this.changeInput}>
+            </textarea>
+        </fieldset>
+        
     )
 
     handleInputChange(ev){
@@ -102,15 +108,13 @@ export class Editor extends Form {
         this.props.onSubmit(promise);
     }
 
-    TagList = ()=>(
+    TagList = (onClick)=>(
         <div className="tag-list">
             {
             (this.props.tagList || []).map(tag =>  (
-                <span className="tag-default tag-pill" key={tag}>
-                    <i  className="ion-close-round"
-                        onClick={this.removeTagHandler(tag)}>
-                    </i>
-                    {tag}
+                <span className="tag-default tag-pill" key={'tag_'+tag}>
+                    {tag+' '}<FontAwesomeIcon icon={faTimes} data-testid={'tag_'+tag}
+                        onClick={onClick(tag)} alt="close tag" />
                 </span>
                 ))
             }
@@ -133,9 +137,9 @@ export class Editor extends Form {
                 {this.Field('title', this.props.title, 'text')}
                 {this.Field('description', this.props.description, 'text')}
                 {this.TextareaField('body', this.props.body)}
-            </fieldset>
-            {this.Field('tagInput', this.props.tagInput, 'text', this.watchForEnter)}
-            {this.TagList()}
+                {this.Field('tagInput', this.props.tagInput, 'text', this.watchForEnter)}
+            </fieldset>            
+            {this.TagList((tag)=>{this.removeTagHandler(tag)})}
             {this.SubmitButton('Publish')}
         </form>     
         );
