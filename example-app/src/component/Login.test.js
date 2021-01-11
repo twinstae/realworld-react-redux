@@ -1,6 +1,0 @@
-describe('Login View', () => {
-    it('', ()=>{
-        
-    })
-    
-})

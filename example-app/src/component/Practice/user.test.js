@@ -45,4 +45,4 @@ it("renders user data", async () => {
   
     // remove the mock to ensure tests are completely isolated
     global.fetch.mockRestore();
-  });
+});

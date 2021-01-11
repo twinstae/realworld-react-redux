@@ -2,9 +2,9 @@ import React from 'react';
 import ListErrors from './ListErrors';
 
 class Form extends React.Component {
-
     template = {};
     submitMessage = "Submit";
+    testid = "Form";
 
     constructor(){
         super();
@@ -34,14 +34,15 @@ class Form extends React.Component {
         });
     }
 
-    componentWillUnmount(){ this.props.onUnload(); }
+    componentWillUnmount(){ this.props.onUnload ? this.props.onUnload() : null }
 
     Field = (name, value, type, onKeyUp) => (
-            <fieldset className="form-group">
+            <fieldset className="form-group" key={'field_'+name}>
                 <input
                     className="form-control form-control-lg"
                     type={type ? type : name}
                     placeholder={name}
+                    data-testid={'form_field_'+name}
                     name={name}
                     value={value}
                     onChange={this.changeInput}
@@ -49,15 +50,16 @@ class Form extends React.Component {
             </fieldset>
         );
 
-    SubmitButton = () => (
+    SubmitButton = (message) => (
         <button 
             className="btn btn-lg btn-primary pull-xs-right"
+            data-testid="submit"
             type="submit">
-            {this.submitMessage}
+            {message}
         </button>
     );
 
-    FormBody =(submitMessage) => (   
+    FormBody =() => (   
         <div className="row">
             <form onSubmit={this.submitForm(this.state)}>
                 <fieldset>                
@@ -67,13 +69,13 @@ class Form extends React.Component {
                         return this.Field(name, value, type);
                     })}
                 </fieldset>
-                {this.SubmitButton()}
+                {this.SubmitButton(this.submitMessage)}
             </form>   
         </div>
         );
 
     Frame = (child, pageCSS='auth-page') => (
-            <div className={pageCSS}>
+            <div className={pageCSS} data-testid={this.testid}>
                 <div className="container page">
                     {ListErrors(this.props.errors)}
                     {child}
