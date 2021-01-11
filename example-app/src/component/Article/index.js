@@ -71,7 +71,7 @@ const ArticleView = (article)=>{
   
 
 class Article extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
       console.log('start');
       this.props.onLoad(
         agent.Articles.get(this.props.match.params.id)

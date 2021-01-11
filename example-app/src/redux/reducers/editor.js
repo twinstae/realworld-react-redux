@@ -28,7 +28,6 @@ export default (state = {}, action) => {
         case EDITOR_PAGE_UNLOADED:
             return {};
         case ARTICLE_SUBMITTED:
-            console.log(action);
             return {
                 ...state,
                 inProgress: null,

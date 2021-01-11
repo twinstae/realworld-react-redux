@@ -35,7 +35,9 @@ class Form extends React.Component {
         });
     }
 
-    componentWillUnmount(){ this.props.onUnload ? this.props.onUnload() : null }
+    componentWillUnmount(){
+        if (this.props.onUnload){ this.props.onUnload() }
+    }
 
     Field = (name, value, type, onKeyUp) => (
             <fieldset className="form-group" key={'field_'+name}>
