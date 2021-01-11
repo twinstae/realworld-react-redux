@@ -33,7 +33,7 @@ export class Editor extends Form {
     template = {
         'title': 'text',
         'description': 'text',
-        'body': 'text',
+        'body': 'textarea',
         'tagInput': 'text',
     }
 
@@ -145,7 +145,9 @@ export class Editor extends Form {
         );
 
     MarkdownPreview = () => {
-        const markup = { __html: marked(this.props.body ? this.props.body : '', { sanitize: true }) };
+        const markup = { __html: marked(
+            this.props.body || '',
+            { sanitize: true }) };
         return <div
             className="col-md-6"
             style={{margin:'20px'}}
