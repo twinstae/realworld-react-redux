@@ -5,6 +5,27 @@ import { ADD_TAG, ARTICLE_SUBMITTED, EDITOR_PAGE_LOADED, EDITOR_PAGE_UNLOADED, R
 import agent from '../agent';
 import marked from 'marked';
 
+const mapStateToProps = (state) => ({
+    ...state.editor
+})
+
+const mapDispatchToProps = dispatch => ({
+    onAddTag: () =>
+        dispatch({ type: ADD_TAG }),
+    onLoad: payload =>
+        dispatch({ type: EDITOR_PAGE_LOADED, payload}),
+    onRemoveTag: tag =>
+        dispatch({ type: REMOVE_TAG, tag }),
+    onSubmit: payload =>{
+        console.log(payload)
+        dispatch({ type: ARTICLE_SUBMITTED, payload })
+    },        
+    onUnload: payload =>
+        dispatch({ type: EDITOR_PAGE_UNLOADED }),
+    onUpdateField: (key, value) =>
+        dispatch({ type: UPDATE_FIELD_EDITOR, key, value})
+})
+
 export class Editor extends Form {
     template = {
         'title': 'text',
@@ -142,26 +163,5 @@ export class Editor extends Form {
     }
     
 }
-
-const mapStateToProps = (state) => ({
-    ...state.editor
-})
-
-const mapDispatchToProps = dispatch => ({
-    onAddTag: () =>
-        dispatch({ type: ADD_TAG }),
-    onLoad: payload =>
-        dispatch({ type: EDITOR_PAGE_LOADED, payload}),
-    onRemoveTag: tag =>
-        dispatch({ type: REMOVE_TAG, tag }),
-    onSubmit: payload =>{
-        console.log(payload)
-        dispatch({ type: ARTICLE_SUBMITTED, payload })
-    },        
-    onUnload: payload =>
-        dispatch({ type: EDITOR_PAGE_UNLOADED }),
-    onUpdateField: (key, value) =>
-        dispatch({ type: UPDATE_FIELD_EDITOR, key, value})
-})
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor)

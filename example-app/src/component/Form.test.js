@@ -1,10 +1,11 @@
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom';
 import {act} from 'react-dom/test-utils';
-
+import { click } from './Practice/toggle.test'
 import Form from './Form';
 
 let container = null;
+
 beforeEach(() => {
   // setup a DOM element as a render target
   container = document.createElement("div");
@@ -19,11 +20,18 @@ afterEach(() => {
 });
 
 function renderCP(component){
-    act(()=>{
-        render(component, container);
-    });
+    act(()=>{ render(component, container); });
 }
 
+function expectAttr(component, attr, value) {
+    expect(component.getAttribute(attr)).toEqual(value);
+}
+
+function expectValue(component, value) {
+    expectAttr(component, 'value', value);
+}
+
+const select = (id) => document.querySelector(`[data-testid=${id}]`);
 
 const someTemplate = {
     'title' : 'text',
@@ -40,27 +48,24 @@ class SomeForm extends Form {
 
 const form = new SomeForm();
 
-function expectValue(component, value) {
-    expect(component.getAttribute('value')).toEqual(value);
-}
-
-const select = (id) => document.querySelector(`[data-testid=${id}]`);
-
-function testFieldByName(name, value){
+function testFieldByName(name, value, type=''){
+    type = type ? type : name;
     const field = select('form_field_'+name);
+    expectAttr(field, 'name', name)
     expectValue(field, value);
+    expectAttr(field, 'type', type)
 }
 
 it("render Field",()=>{
     const name = 'body';
     renderCP(form.Field(name, '', 'text'));
-    testFieldByName(name, '');
+    testFieldByName(name, '', 'text');
 });
 
 it("render FormBody auto Fields",()=>{
     renderCP(form.FormBody());
     for (const name of Object.keys(someTemplate)){
-        testFieldByName(name, '');
+        testFieldByName(name, '', form.template[name]);
     }
 });
 
@@ -72,19 +77,38 @@ it("empty State", ()=>{
     })
 })
 
+function findSetForm(name, value){
+    const field = select('form_field_'+name);
+    act(()=>{
+        field.setAttribute('value', value);
+    })
+    return field
+}
+
 it('handle input Change', ()=>{
     renderCP(<SomeForm />)
-    const titleField = select('form_field_title');
     const str = 'tamjungrabbit';
-    act(()=>{   
-        titleField.setAttribute('value', str);
-    })
+    const titleField = findSetForm('title', str)
     expectValue(titleField, str);
 })
 
 it("render submitButton with cutom message", ()=>{
     renderCP(form.SubmitButton(customMessage));
-    const button = select('submit')
-    expect(button.innerHTML).toEqual(customMessage);
+    expect(select('submit').innerHTML).toEqual(customMessage);
 })
 
+it('input and submit Form', ()=>{
+    renderCP(<SomeForm onSubmit={
+        ({title, content})=>{
+            expect({title, content}).toEqual(expected)
+        }}/>)
+
+    const expected = {
+        title: '제목',
+        content: '내용'
+    }
+
+    findSetForm('title', expected.title)
+    findSetForm('content', expected.content)
+    click(select('submit'));
+})

@@ -44,8 +44,8 @@ function innerToBe(component, expected) {
     expect(component.innerHTML).toBe(expected);
 }
 
-function click(button) {
-    button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+function click(component) {
+    component.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 }
 
 export { click, innerToBe };

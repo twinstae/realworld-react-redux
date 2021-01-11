@@ -9,12 +9,13 @@ class Form extends React.Component {
     constructor(){
         super();
         this.changeInput = this.handleInputChange.bind(this);
-        this.submitForm = (fields) => ev => {
-            ev.preventDefault();
-            this.props.onSubmit(fields);
-        };       
         this.state = this.emptyState(); 
     }
+
+    submitForm = (fields) => ev => {
+        ev.preventDefault();
+        this.props.onSubmit(fields);
+    };  
 
     emptyState(){
         return Object.keys(this.template).reduce(
