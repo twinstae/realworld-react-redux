@@ -36,6 +36,7 @@ export class Editor extends Form {
         'body': 'textarea',
         'tagInput': 'text',
     }
+    submitMessage = 'Publish'
 
     componentDidUpdate(prevProps) {
         if (this.props.match.params.slug !== prevProps.match.params.slug){
@@ -121,17 +122,17 @@ export class Editor extends Form {
         </div>
     )
 
-    SubmitButton = () => (
+    SubmitButton = (submitMessage) => (
         <button
             className="btn btn-lg pull-xs-right btn-primary"
             type="button"
-            disabled={this.props.inProgress}
+            disabled={this.props.inProgress} // 한 줄 때문에...
             onClick={this.submitForm}>      
-            {this.submitMessage}
+            {submitMessage}
         </button>
     );
 
-    FormBody =(submitMessage) => (   
+    FormBody =() => (   
         <form>
             <fieldset>                
                 {this.Field('title', this.props.title, 'text')}
@@ -140,7 +141,7 @@ export class Editor extends Form {
                 {this.Field('tagInput', this.props.tagInput, 'text', this.watchForEnter)}
             </fieldset>            
             {this.TagList((tag)=>{this.removeTagHandler(tag)})}
-            {this.SubmitButton('Publish')}
+            {this.SubmitButton(this.submitMessage)}
         </form>     
         );
 
