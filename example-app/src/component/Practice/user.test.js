@@ -1,48 +1,61 @@
-import React from 'react'
+import User from "./user";
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
-import User from "./user";
 
 let container = null;
 beforeEach(() => {
-  // setup a DOM element as a render target
   container = document.createElement("div");
   document.body.appendChild(container);
 });
 
 afterEach(() => {
-  // cleanup on exiting
   unmountComponentAtNode(container);
   container.remove();
   container = null;
 });
 
-function selectContentTobe(selector, expected){
-    expect(container.querySelector(selector).textContent).toBe(expected);
+const fakeStore = {
+  123: {
+    name: "Joni Baez",
+    age: "32",
+    address: "123, Charming Avenue"
+  },
+  124: {
+    name: "TaeHee",
+    age: "25",
+    address: "124, 경기도 파주시"
+  }  
 }
 
-it("renders user data", async () => {
-    const fakeUser = {
-      name: "Joni Baez",
-      age: "32",
-      address: "123, Charming Avenue"
-    };
+function expectContent(selector){
+    return expect(container.querySelector(selector).textContent);
+}
 
-    jest.spyOn(global, "fetch").mockImplementation(() =>
+function expectUser(user){
+  expectContent("summary").toBe(user.name);
+  expectContent("strong").toBe(user.age);
+  expectContent("details").toContain(user.address);
+}
+
+async function renderUserById(id){
+  await act(async () => {
+    render(<User id={id} />, container);
+  });
+}
+
+function testUserByID(id){
+  it("renders user data "+id, async () => {
+    jest.spyOn(global, "fetch").mockImplementation((url) =>
       Promise.resolve({
-        json: () => Promise.resolve(fakeUser)
+        json: () => Promise.resolve(fakeStore[url.slice(1)])
       })
     );
-  
-    // Use the asynchronous version of act to apply resolved promises
-    await act(async () => {
-      render(<User id="123" />, container);
-    });
-  
-    selectContentTobe("summary", fakeUser.name);
-    selectContentTobe("strong", fakeUser.age);
-    expect(container.textContent).toContain(fakeUser.address);
-  
-    // remove the mock to ensure tests are completely isolated
+
+    await renderUserById(id);
+    expectUser(fakeStore[id]);
     global.fetch.mockRestore();
-});
+  });
+}
+
+testUserByID("123")
+testUserByID("124")

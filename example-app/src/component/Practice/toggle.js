@@ -4,12 +4,8 @@ export default function Toggle() {
     const [state, setState] = useState(false);
     return (
         <button
-            onClick={ ()=>{
-                setState(prev => !prev);
-            }}
-            data-testid="toggle"
-            >
-            {state === true ? "Turn off" : "Turn on"}
+            onClick={ ()=>{setState(prev => !prev);}}>            
+            {state === true ? "Turn on" : "Turn off"}
         </button>
     )
 }

@@ -1,37 +1,9 @@
-import React from "react";
-import { render, unmountComponentAtNode } from "react-dom";
-import { act } from "react-dom/test-utils";
-
 import Hello from "./hello";
 
-let container = null;
-beforeEach(() => {
-  // setup a DOM element as a render target
-  container = document.createElement("div");
-  document.body.appendChild(container);
-});
-
-afterEach(() => {
-  // cleanup on exiting
-  unmountComponentAtNode(container);
-  container.remove();
-  container = null;
-});
-
-function renderCP(component){
-    act(()=>{
-        render(component, container);
-    });
-}
-
-function expectContentToBe(expected){
-    expect(container.textContent).toBe(expected);
-}
-
-function testHello(testName, name, message){
+function testHello(testName, name, expected){
     it(testName, () => {
-        renderCP(<Hello name={name}/>);
-        expectContentToBe(message);
+        const wrapper = shallow(<Hello name={name}/>);
+        expect(wrapper.text()).toEqual(expected);
     })
 }
 

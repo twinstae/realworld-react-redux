@@ -1,25 +1,26 @@
-import React from 'react';
-import { shallow } from 'enzyme';
 import Toggle from './toggle';
 
 let wrapper;
 let button;
 beforeEach(()=>{
-  wrapper = shallow(<Toggle />);
+  wrapper = mount(<Toggle />);
   button = wrapper.find('button');
 })
 
 it('render withoutError', ()=>{
-  expect(1).toBe(1);
+  expect(button.text()).toEqual('Turn off')
 })
 
-it('render withoutError', ()=>{
-  button.simulate('click');
-  expect(button).toHaveText('Turn on')
+it('click after text', ()=>{
+  wrapper.find('button').simulate('click');
+  expect(button.text()).toEqual('Turn on')
 })
 
-function click(component) {
-    component.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-}
-
-export {click};
+it('on off on off...', ()=>{
+  wrapper.find('button').simulate('click');
+  expect(button.text()).toEqual('Turn on')
+  wrapper.find('button').simulate('click');
+  expect(button.text()).toEqual('Turn off')
+  wrapper.find('button').simulate('click');
+  expect(button.text()).toEqual('Turn on')
+})
