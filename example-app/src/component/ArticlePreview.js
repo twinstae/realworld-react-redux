@@ -16,7 +16,7 @@ const Meta = (article)=> {
         <div className="article-meta">
             <a> 
                 <img src={article.author.image} alt=""
-                    class="w3-bar-item w3-circle" style={{width:"32px"}}/>
+                    className="w3-bar-item w3-circle" style={{width:"32px"}}/>
             </a>
             <div className="info">
                 <a className="author">{article.author.username}</a>
@@ -57,6 +57,7 @@ const ArticlePreview = props => {
             {GoToArticle(article)}
         </div>
     );
+    //
 }
 
 export default ArticlePreview;

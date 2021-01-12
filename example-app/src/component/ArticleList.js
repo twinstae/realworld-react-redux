@@ -8,8 +8,8 @@ const NoArticles = (
     </div>
   );
 const Content = (articles)=>(
-    <div>
-    { articles.map(article => <ArticlePreview article={article} key={article.slug} />) }
+    <div id="article-list">
+    { articles.map(article => <ArticlePreview article={article} key={article.slug}/>) }
     </div>
 );
 
