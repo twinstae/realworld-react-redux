@@ -64,7 +64,7 @@ class App extends React.Component {
       ) : null;
 
     return(
-      <BrowserRouter>
+      <BrowserRouter history={history}>
         <div>
           <Header />
           {Load}

@@ -5,9 +5,6 @@ import { ADD_TAG, ARTICLE_SUBMITTED, EDITOR_PAGE_LOADED, EDITOR_PAGE_UNLOADED, R
 import agent from '../agent';
 import marked from 'marked';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
-
 const mapStateToProps = (state) => ({
     ...state.editor
 })
@@ -114,8 +111,7 @@ export class Editor extends Form {
             {
             (this.props.tagList || []).map(tag =>  (
                 <span className="tag-default tag-pill" key={'tag_'+tag}>
-                    {tag+' '}<FontAwesomeIcon icon={faTimes} data-testid={'tag_'+tag}
-                        onClick={onClick(tag)} alt="close tag" />
+                    {tag+' '}
                 </span>
                 ))
             }
