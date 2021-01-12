@@ -5,14 +5,18 @@ import Toggle from './toggle';
 let wrapper;
 let button;
 beforeEach(()=>{
-  //wrapper = shallow(Toggle());
-  //button = wrapper.find('button');
+  wrapper = shallow(<Toggle />);
+  button = wrapper.find('button');
 })
 
 it('render withoutError', ()=>{
   expect(1).toBe(1);
 })
 
+it('render withoutError', ()=>{
+  button.simulate('click');
+  expect(button).toHaveText('Turn on')
+})
 
 function click(component) {
     component.dispatchEvent(new MouseEvent("click", { bubbles: true }));

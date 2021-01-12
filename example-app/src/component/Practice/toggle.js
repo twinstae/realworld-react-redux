@@ -6,7 +6,6 @@ export default function Toggle() {
         <button
             onClick={ ()=>{
                 setState(prev => !prev);
-                props.onChange(!state);
             }}
             data-testid="toggle"
             >
