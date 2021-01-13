@@ -87,7 +87,7 @@ export class Editor extends Form {
                     this.Field('description', this.props.description),
                     this.Field('body',  this.props.body, 'textarea'),
                     this.Field('tagInput', this.props.tagInput, 'text', this.watchForEnter),
-                    this.TagList((tag)=>{this.removeTagHandler(tag)})]                
+                    this.TagList()]                
                 )}
                 {this.MarkdownPreview()}
             </div>,
@@ -102,16 +102,15 @@ export class Editor extends Form {
         }
     }
 
-    removeTagHandler = tag => () => {
-        this.props.onRemoveTag(tag);
-    }
-
-    TagList = (onClick)=>(
+    TagList = ()=>(
         <div className="tag-list">
             {
             (this.props.tagList || []).map(tag =>  (
                 <span className="tag-default tag-pill" key={'tag_'+tag}>
                     {tag+' '}
+                    <i className="ion-close-round"
+                       onClick={(tag) => {this.props.onRemoveTag(tag);}}>
+                    </i>
                 </span>
                 ))
             }
@@ -119,9 +118,9 @@ export class Editor extends Form {
     )
 
     MarkdownPreview = () => {
-        const markup = { __html: marked(
-            this.props.body || '',
-            { sanitize: true }) };
+        const markup = {
+            __html: marked( this.props.body || '', { sanitize: true })
+        };
         return <div
             className="col-md-6"
             style={{margin:'20px'}}
