@@ -62,20 +62,20 @@ export class Editor extends Form {
     }
     
     submitForm = async (ev) => {
-        console.log("why am i?")
         ev.preventDefault();
+        const props = this.props;
         const article = {
-            title: this.props.title,
-            description: this.props.description,
-            body: this.props.body,
-            tagList: this.props.tagList
+            title: props.title,
+            description: props.description,
+            body: props.body,
+            tagList: props.tagList
         };
 
-        const slug = { slug: this.props.articleSlug};
-        const promise = this.props.articleSlug ?
+        const slug = { slug: props.articleSlug };
+        const promise = props.articleSlug ?
             await agent.Articles.update(Object.assign(article, slug)) :
             await agent.Articles.create(article);
-        this.props.onSubmit(promise);
+        props.onSubmit(promise);
     }
 
     render = () => {
