@@ -15,6 +15,53 @@ const mapDispatchToProps = dispatch => ({
     })
 })
 
+const MainView = props =>(
+    <div className="col-md-9">        
+        <ul className="nav nav-pills outline-active">
+            <YourFeedTab
+                token={props.token}
+                tab={props.tab}
+                onTabClick={props.onTabClick} />
+            <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
+            <TagFilterTab tag={props.tag} />
+        </ul>
+        <ArticleList articles={props.articles} />
+    </div>
+);
+
+const YourFeedTab = props =>
+    props.token
+    ? NavItem(
+        'Your Feed',
+        nowCss('feed' === props.tab),
+        onTabClick({
+            tab: 'feed',
+            pager: agent.Articles.feed,
+            payload: agent.Articles.feed()
+        }, props.onTabClick)
+    )
+    : null;
+
+const GlobalFeedTab = props =>
+    NavItem(
+        "Global Feed",
+        nowCss('all', props.tab), 
+        onTabClick({
+            tab: 'all',
+            pager: agent.Articles.all,
+            payload: agent.Articles.all()
+        }, props.onTabClick)
+    )
+
+const TagFilterTab = props =>
+    props.tag
+    ? NavItem(
+        props.tag,
+        'nav-link active', 
+        null
+    )
+    : null
+
 const nowCss = (isActive)=> isActive ? 'nav-link active' : 'nav-link';
 
 const onTabClick = (command, onTabClick) => (ev) => {
@@ -32,48 +79,5 @@ function NavItem(name, className, onClick) {
         </a>
     </li>;
 }
-
-const YourFeedTab = props => props.token ? NavItem(
-        'Your Feed',
-        nowCss('feed' === props.tab),
-        onTabClick({
-            tab: 'feed',
-            pager: agent.Articles.feed,
-            payload: agent.Articles.feed()
-        }, props.onTabClick)
-    ) : null;
-
-const GlobalFeedTab = props => NavItem(
-        "Global Feed",
-        nowCss('all', props.tab), 
-        onTabClick({
-            tab: 'all',
-            pager: agent.Articles.all,
-            payload: agent.Articles.all()
-        }, props.onTabClick)
-    )
-
-const TagFilterTab = props => {
-    if (!props.tag) return null;
-    return NavItem(
-        props.tag,
-        'nav-link active', 
-        null
-    )
-    };
-
-const MainView = props =>(
-    <div className="col-md-9">        
-        <ul className="nav nav-pills outline-active">
-            <YourFeedTab
-                token={props.token}
-                tab={props.tab}
-                onTabClick={props.onTabClick} />
-            <GlobalFeedTab tab={props.tab} onTabClick={props.onTabClick} />
-            <TagFilterTab tag={props.tag} />
-        </ul>
-        <ArticleList articles={props.articles} />
-    </div>
-);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainView);
