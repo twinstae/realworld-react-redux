@@ -23,6 +23,8 @@ const requests = {
         superagent.post(full(url),body).use(tokenPlugin).then(resBody),
     put: (url, body) =>
         superagent.put(full(url), body).use(tokenPlugin).then(resBody),
+    del: (url, body) =>
+        superagent.del(full(url), body).use(tokenPlugin).then(resBody),
 };
 
 const Auth = {
@@ -49,7 +51,9 @@ const Articles = {
     update: article =>
         requests.put(`/articles/${article.slug}`, { article: omitSlug(article) }),
     create: article =>
-        requests.post('/articles', { article })
+        requests.post('/articles', { article }),
+    del: slug =>
+        requests.del(`/articles/${slug}`)
 };
 
 export default {
