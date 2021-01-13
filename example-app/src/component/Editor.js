@@ -55,27 +55,12 @@ export class Editor extends Form {
         }
         this.props.onLoad(null);
     }
-
-    componentWillUnmount(){
-        this.props.onUnload();
-    } 
-
+    
     handleInputChange(ev){
         const key = ev.target.name;
         this.props.onUpdateField(key, ev.target.value)
     }
-
-    watchForEnter = ev => {
-        if (ev.keyCode === 13) {
-            ev.preventDefault();
-            this.props.onAddTag();
-        }
-    }
-
-    removeTagHandler = tag => () => {
-        this.props.onRemoveTag(tag);
-    }
-
+    
     submitForm = async (ev) => {
         console.log("why am i?")
         ev.preventDefault();
@@ -91,6 +76,34 @@ export class Editor extends Form {
             await agent.Articles.update(Object.assign(article, slug)) :
             await agent.Articles.create(article);
         this.props.onSubmit(promise);
+    }
+
+    render = () => {
+        return this.Frame(
+            <div className="row">
+                {this.FormBody(
+                    this.props,
+                    [this.Field('title', this.props.title),
+                    this.Field('description', this.props.description),
+                    this.Field('body',  this.props.body, 'textarea'),
+                    this.Field('tagInput', this.props.tagInput, 'text', this.watchForEnter),
+                    this.TagList((tag)=>{this.removeTagHandler(tag)})]                
+                )}
+                {this.MarkdownPreview()}
+            </div>,
+            'editor-page'
+        )
+    }
+
+    watchForEnter = ev => {
+        if (ev.keyCode === 13) {
+            ev.preventDefault();
+            this.props.onAddTag();
+        }
+    }
+
+    removeTagHandler = tag => () => {
+        this.props.onRemoveTag(tag);
     }
 
     TagList = (onClick)=>(
@@ -113,23 +126,6 @@ export class Editor extends Form {
             className="col-md-6"
             style={{margin:'20px'}}
             dangerouslySetInnerHTML={markup}></div>;
-    }
-
-    render = () => {
-        return this.Frame(
-            <div className="row">
-                {this.FormBody(
-                    this.props,
-                    [this.Field('title', this.props.title),
-                    this.Field('description', this.props.description),
-                    this.Field('body',  this.props.body, 'textarea'),
-                    this.Field('tagInput', this.props.tagInput, 'text', this.watchForEnter),
-                    this.TagList((tag)=>{this.removeTagHandler(tag)})]                
-                )}
-                {this.MarkdownPreview()}
-            </div>,
-            'editor-page'
-        )
     }
 }
 

@@ -13,7 +13,7 @@ class Form extends React.Component {
     }
 
     componentWillUnmount(){
-        if (this.props.onUnload){ this.props.onUnload() }
+        this.props && this.props.onUnload()
     }
 
     emptyState(){
