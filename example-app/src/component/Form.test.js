@@ -33,7 +33,7 @@ class SomeForm extends Form {
 const form = new SomeForm();
 
 function testFieldByName(name, value, type=''){
-    type = type ? type : name;
+    type = type || name;
     const field = selectTestId('form_field_'+name);
     expectAttrs(field, {name, value, type});
 }
