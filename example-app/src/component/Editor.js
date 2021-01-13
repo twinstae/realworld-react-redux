@@ -115,23 +115,19 @@ export class Editor extends Form {
             dangerouslySetInnerHTML={markup}></div>;
     }
 
-    Columns = () => (
-        <div className="row">
-            {this.FormBody(
-                this.props,
-                [this.Field('title', this.props.title),
-                 this.Field('description', this.props.description),
-                 this.Field('body',  this.props.body, 'textarea'),
-                 this.Field('tagInput', this.props.tagInput, 'text', this.watchForEnter),
-                 this.TagList((tag)=>{this.removeTagHandler(tag)})]                
-            )}
-            {this.MarkdownPreview()}
-        </div>
-    )
-
     render = () => {
         return this.Frame(
-            this.Columns(),
+            <div className="row">
+                {this.FormBody(
+                    this.props,
+                    [this.Field('title', this.props.title),
+                    this.Field('description', this.props.description),
+                    this.Field('body',  this.props.body, 'textarea'),
+                    this.Field('tagInput', this.props.tagInput, 'text', this.watchForEnter),
+                    this.TagList((tag)=>{this.removeTagHandler(tag)})]                
+                )}
+                {this.MarkdownPreview()}
+            </div>,
             'editor-page'
         )
     }
