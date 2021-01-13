@@ -38,7 +38,19 @@ class Form extends React.Component {
         });
     }
 
-    Field = (name, value, type, onKeyUp) => (
+    Field = (name, value, type='text', onKeyUp=null) => 
+        type==='textarea' ? (
+            <fieldset className="form-group" key={'field_'+name}>
+                <textarea
+                    className="form-control"
+                    rows="8"
+                    placeholder="Write your article (in markdown)"
+                    name={name}
+                    value={value}
+                    onChange={this.changeInput}>
+                </textarea>
+            </fieldset>
+        ) : (
             <fieldset className="form-group" key={'field_'+name}>
                 <input
                     className="form-control form-control-lg"
@@ -56,24 +68,26 @@ class Form extends React.Component {
         <button 
             className="btn btn-lg btn-primary pull-xs-right"
             data-testid="submit"
+            disabled={ this.props && this.props.inProgress }
             type="submit">
             {message}
         </button>
     );
 
-    FormBody =(state) => (   
-        <div className="row">
-            <form onSubmit={this.submitForm(state)}>
+    FormBody =(state, children) => (   
+            <form onSubmit={()=>{this.submitForm(state)}}>
                 <fieldset>                
-                    {Object.keys(this.template).map((name)=>{
-                        const value = state[name];
-                        const type = this.template[name];
-                        return this.Field(name, value, type);
-                    })}
+                    {
+                    children
+                    || Object.keys(this.template).map((name)=>{
+                            const value = state[name];
+                            const type = this.template[name];
+                            return this.Field(name, value, type);
+                        })
+                    }
                 </fieldset>
                 {this.SubmitButton(this.submitMessage)}
             </form>   
-        </div>
         );
 
     Frame = (child, pageCSS='auth-page') => (
@@ -85,7 +99,11 @@ class Form extends React.Component {
             </div>
         );
 
-    render = () => this.Frame(this.FormBody(this.state));
+    render = () => this.Frame(            
+        <div className="row">
+            {this.FormBody(this.state)}
+        </div>
+    )
 }
 
 export default Form;

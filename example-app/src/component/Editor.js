@@ -60,20 +60,6 @@ export class Editor extends Form {
         this.props.onUnload();
     } 
 
-    TextareaField = (name, value) => (
-        <fieldset className="form-group">
-            <textarea
-                className="form-control"
-                rows="8"
-                placeholder="Write your article (in markdown)"
-                name={name}
-                value={value}
-                onChange={this.changeInput}>
-            </textarea>
-        </fieldset>
-        
-    )
-
     handleInputChange(ev){
         const key = ev.target.name;
         this.props.onUpdateField(key, ev.target.value)
@@ -91,6 +77,7 @@ export class Editor extends Form {
     }
 
     submitForm = async (ev) => {
+        console.log("why am i?")
         ev.preventDefault();
         const article = {
             title: this.props.title,
@@ -118,29 +105,6 @@ export class Editor extends Form {
         </div>
     )
 
-    SubmitButton = (submitMessage) => (
-        <button
-            className="btn btn-lg pull-xs-right btn-primary"
-            type="button"
-            disabled={this.props.inProgress} // 한 줄 때문에...
-            onClick={this.submitForm}>      
-            {submitMessage}
-        </button>
-    );
-
-    FormBody =() => (   
-        <form>
-            <fieldset>                
-                {this.Field('title', this.props.title, 'text')}
-                {this.Field('description', this.props.description, 'text')}
-                {this.TextareaField('body', this.props.body)}
-                {this.Field('tagInput', this.props.tagInput, 'text', this.watchForEnter)}
-            </fieldset>            
-            {this.TagList((tag)=>{this.removeTagHandler(tag)})}
-            {this.SubmitButton(this.submitMessage)}
-        </form>     
-        );
-
     MarkdownPreview = () => {
         const markup = { __html: marked(
             this.props.body || '',
@@ -153,7 +117,14 @@ export class Editor extends Form {
 
     Columns = () => (
         <div className="row">
-            {this.FormBody()}
+            {this.FormBody(
+                this.props,
+                [this.Field('title', this.props.title),
+                 this.Field('description', this.props.description),
+                 this.Field('body',  this.props.body, 'textarea'),
+                 this.Field('tagInput', this.props.tagInput, 'text', this.watchForEnter),
+                 this.TagList((tag)=>{this.removeTagHandler(tag)})]                
+            )}
             {this.MarkdownPreview()}
         </div>
     )
@@ -164,7 +135,6 @@ export class Editor extends Form {
             'editor-page'
         )
     }
-    
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor)
