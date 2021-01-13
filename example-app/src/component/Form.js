@@ -12,6 +12,10 @@ class Form extends React.Component {
         this.state = this.emptyState(); 
     }
 
+    componentWillUnmount(){
+        if (this.props.onUnload){ this.props.onUnload() }
+    }
+
     submitForm = (fields) => ev => {
         ev.preventDefault();
         this.props.onSubmit(fields);
@@ -25,18 +29,13 @@ class Form extends React.Component {
 
     handleInputChange(ev){
         const target = ev.target;
-        const name = target.name;
         this.setState(state => {
             const newState = {
                 ...state,
-                [name] : target.value
+                [target.name] : target.value
             }
             return newState
         });
-    }
-
-    componentWillUnmount(){
-        if (this.props.onUnload){ this.props.onUnload() }
     }
 
     Field = (name, value, type, onKeyUp) => (
@@ -62,12 +61,12 @@ class Form extends React.Component {
         </button>
     );
 
-    FormBody =() => (   
+    FormBody =(state) => (   
         <div className="row">
-            <form onSubmit={this.submitForm(this.state)}>
+            <form onSubmit={this.submitForm(state)}>
                 <fieldset>                
                     {Object.keys(this.template).map((name)=>{
-                        const value = this.state[name];
+                        const value = state[name];
                         const type = this.template[name];
                         return this.Field(name, value, type);
                     })}
@@ -86,7 +85,7 @@ class Form extends React.Component {
             </div>
         );
 
-    render = () => this.Frame(this.FormBody());
+    render = () => this.Frame(this.FormBody(this.state));
 }
 
 export default Form;

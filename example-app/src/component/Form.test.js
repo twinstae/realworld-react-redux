@@ -1,37 +1,21 @@
+import { shallow, mount } from 'enzyme';
 import React from 'react'
-import { render, unmountComponentAtNode } from 'react-dom';
-import {act} from 'react-dom/test-utils';
-import { click } from './Practice/toggle.test'
 import Form from './Form';
 
-let container = null;
-
-beforeEach(() => {
-  // setup a DOM element as a render target
-  container = document.createElement("div");
-  document.body.appendChild(container);
-});
-
-afterEach(() => {
-  // cleanup on exiting
-  unmountComponentAtNode(container);
-  container.remove();
-  container = null;
-});
-
-function renderCP(component){
-    act(()=>{ render(component, container); });
-}
+let wrapper;
 
 function expectAttr(component, attr, value) {
-    expect(component.getAttribute(attr)).toEqual(value);
+    const props = component.props();
+    expect(props[attr]).toEqual(value);
 }
 
-function expectValue(component, value) {
-    expectAttr(component, 'value', value);
+function expectAttrs(component, json){
+    Object.keys(json).map((key)=>{
+        expectAttr(component, key, json[key]);
+    });
 }
-
-const select = (id) => document.querySelector(`[data-testid=${id}]`);
+const select = (selector) => wrapper.find(selector);
+const selectTestId = (testId) => select(`[data-testid="${testId}"]`);
 
 const someTemplate = {
     'title' : 'text',
@@ -50,20 +34,22 @@ const form = new SomeForm();
 
 function testFieldByName(name, value, type=''){
     type = type ? type : name;
-    const field = select('form_field_'+name);
-    expectAttr(field, 'name', name)
-    expectValue(field, value);
-    expectAttr(field, 'type', type)
+    const field = selectTestId('form_field_'+name);
+    expectAttrs(field, {name, value, type});
 }
 
 it("render Field",()=>{
     const name = 'body';
-    renderCP(form.Field(name, '', 'text'));
+    wrapper = shallow(form.Field(name, '', 'text'));
     testFieldByName(name, '', 'text');
 });
 
 it("render FormBody auto Fields",()=>{
-    renderCP(form.FormBody());
+    wrapper = shallow(
+        form.FormBody(
+            form.emptyState(form.template)
+        )
+    );
     for (const name of Object.keys(someTemplate)){
         testFieldByName(name, '', form.template[name]);
     }
@@ -78,30 +64,21 @@ it("empty State", ()=>{
 })
 
 function findSetForm(name, value){
-    const field = select('form_field_'+name);
-    act(()=>{
-        field.setAttribute('value', value);
-    })
+    const field = selectTestId('form_field_'+name);
+    field.simulate('change', { target: { value: value } });
     return field
 }
 
-it('handle input Change', ()=>{
-    renderCP(<SomeForm />)
-    const str = 'tamjungrabbit';
-    const titleField = findSetForm('title', str)
-    expectValue(titleField, str);
-})
-
 it("render submitButton with cutom message", ()=>{
-    renderCP(form.SubmitButton(customMessage));
-    expect(select('submit').innerHTML).toEqual(customMessage);
+    wrapper = shallow(form.SubmitButton(customMessage));
+    expect(selectTestId('submit').text()).toEqual(customMessage);
 })
 
 it('input and submit Form', ()=>{
-    renderCP(<SomeForm onSubmit={
-        ({title, content})=>{
-            expect({title, content}).toEqual(expected)
-        }}/>)
+    const onSubmit = ({title, content})=>{
+        expect({title, content}).toEqual(expected)
+    }
+    wrapper = shallow(<SomeForm onSubmit={onSubmit}/>)
 
     const expected = {
         title: '제목',
@@ -110,5 +87,5 @@ it('input and submit Form', ()=>{
 
     findSetForm('title', expected.title)
     findSetForm('content', expected.content)
-    click(select('submit'));
+    selectTestId('submit').simulate('click');
 })
