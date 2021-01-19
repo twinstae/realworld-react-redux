@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Switch} from 'react-router-dom';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -28,50 +28,44 @@ const mapDispatchToProps = dispatch => ({
     dispatch({ type: REDIRECT })
 });
 
-class App extends React.Component {
-  componentDidUpdate(prevProps) {
-    if (this.props.redirectTo) {
-      console.log(this.props.redirectTo);
-      store.dispatch(push(this.props.redirectTo));
-      this.props.onRedirect();
+function App({ redirectTo, onRedirect, appLoaded, onLoad}){
+  useEffect(()=>{
+    if (redirectTo) {
+      console.log(redirectTo);
+      store.dispatch(push(redirectTo));
+      onRedirect();
     }
-  }
-
-  componentDidMount() {
     const token = window.localStorage.getItem('jwt');
     if (token) {
       agent.setToken(token);
       console.log(token)
     }
-    this.props.onLoad(token ? agent.Auth.current() : null, token);
-  }
+    onLoad(token ? agent.Auth.current() : null, token);
+  })
   
-  render() {
-    if(this.props.redirectTo){
-      return <div></div>;
-    }
-
-    const Load = this.props.appLoaded ?
-      (
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/login" component={Login} /> 
-          <Route path="/register" component={Register}/>
-          <Route path="/article/:id" component={Article} />
-          <Route path="/editor/:slug" component={Editor} />
-          <Route path="/editor/" component={Editor} />
-        </Switch>
-      ) : null;
-
-    return(
-      <BrowserRouter history={history}>
-        <div>
-          <Header />
-          {Load}
-        </div>
-      </BrowserRouter>        
-    )
+  if(redirectTo){
+    return <div></div>;
   }
+
+  const getRoutes = () => (
+    <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/login" component={Login} /> 
+        <Route path="/register" component={Register}/>
+        <Route path="/article/:id" component={Article} />
+        <Route path="/editor/:slug" component={Editor} />
+        <Route path="/editor/" component={Editor} />
+      </Switch>
+  )
+
+  return (
+    <BrowserRouter history={history}>
+      <div>
+        <Header />
+        {appLoaded ? getRoutes(): null}
+      </div>
+    </BrowserRouter>        
+  )
 }
 
 App.contextTypes = {

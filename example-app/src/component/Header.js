@@ -12,22 +12,20 @@ const mapDispatchToProps = dispatch => ({
     onClickLogout: () => dispatch({ type: LOGOUT }),
 });
   
-class Header extends React.Component {
-    render () {
-        return (
-            <nav className="navbar navbar-light">
-                <Link to="/" className="navbar-brand"> {this.props.appName.toLowerCase()} </Link>
-                { 
-                    this.props.currentUser ?
-                        LoginView(
-                            this.props.currentUser.username,
-                            this.props.onClickLogout
-                        ) :
-                        LogoutView
-                }
-            </nav>
-        );
-    }
+function Header({appName, currentUser, onClickLogout}){
+    return (
+        <nav className="navbar navbar-light">
+            <Link to="/" className="navbar-brand"> {appName.toLowerCase()} </Link>
+            { 
+                currentUser ?
+                    LoginView(
+                        currentUser.username,
+                        onClickLogout
+                    ) :
+                    LogoutView
+            }
+        </nav>
+    );
 }
 
 const LoginView = (userName, onClickLogout) => (
